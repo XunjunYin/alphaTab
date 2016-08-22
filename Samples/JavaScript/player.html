@@ -34,6 +34,7 @@
         opacity: 0.75;
         background:#4040FF;
     }
+
     </style>
 </head>
 <body>
@@ -80,7 +81,12 @@
         
         //
         // 1. Load alphaTab
-        at.alphaTab(); 
+        at.alphaTab({
+                staves: [
+                    {id: 'rhythm-down', additionalSettings: {'rhythm-height': 10 } },
+                    'tab'
+                ]
+            }); 
         
         // 
         // 2. Initialize Player and Setup Player UI

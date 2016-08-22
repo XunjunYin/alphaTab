@@ -58,6 +58,7 @@
             var tracks = api.tracks(element, context);
             if(tracks.length > 0) {
                 var beat = cache.FindBeat(tracks, tick);
+                console.log(beat);
                 api.playerCursorUpdateBeat(element, context, beat);
             }
         }
@@ -76,6 +77,7 @@
         var cursorWrapper = context.cursorOptions.cursors;
         var barCursor = context.cursorOptions.barCursor;
         var beatCursor = context.cursorOptions.beatCursor;
+        var resultCursor = context.cursorOptions.resultCursor;
         
         var beatBoundings = cache.FindBeat(beat);
         if(!beatBoundings)
@@ -90,12 +92,32 @@
             width: barBoundings.VisualBounds.W + 'px',
             height: barBoundings.VisualBounds.H + 'px'
         });
-        beatCursor.css({
+         beatCursor.css({
             top: barBoundings.VisualBounds.Y + 'px', 
             left: (beatBoundings.VisualBounds.X + beatBoundings.VisualBounds.W/2) + 'px',
             width: context.cursorOptions.beatCursorWidth + 'px',
             height: barBoundings.VisualBounds.H + 'px'
         });
+
+        var top = beatCursor.offset().top - 8;
+        var left = beatCursor.offset().left;
+        var resultCursor = $('<div class="resultCursor"></div>');
+        resultCursor.css({position: 'absolute', "z-index": 1000, display: 'inline', 'pointer-events': 'none'});
+        resultCursor.css({
+            top: top + 'px', 
+            left: left + 'px',
+            width: '3px',
+            height: '3px'
+        });
+
+        setTimeout(function(){
+            resultCursor.css({
+                background: 'green',
+            });
+            $('body').append(resultCursor);
+        }, 500);
+        
+
         
         if(context.cursorOptions.autoScroll == 'vertical') {
             var padding = beatCursor.offset().top - beatBoundings.VisualBounds.Y;
@@ -205,6 +227,7 @@
                
         // cursor updating
         as.On('positionChanged', function(currentTime, endTime, currentTick, endTick) {
+            console.log(currentTime+','+currentTick);
             previousTick = currentTick;
             api.playerCursorUpdateTick(element, context, currentTick);
                 setTimeout(function() {
